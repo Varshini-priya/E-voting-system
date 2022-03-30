@@ -1,0 +1,46 @@
+connect SYSTEM/SYSTEM;
+create user evs identified by evs;
+GRANT ALL PRIVILEGES TO evs;
+select table_name from user_tables; / select * from tab;
+
+
+1.
+create table "user" (user_id number(20) primary key, name varchar2(90) not null, date_of_birth date not null, address varchar2(90) not null, phone_no number(10) unique not null, constituency varchar2(50) not null, password varchar2(50) not null);
+
+2.
+create table party (party_id number(20) primary key, party_name varchar2(50) not null unique, constituency varchar2(50) not null);
+
+3. 
+create table elections(election_id number(20) primary key, date_time date not null, constituency varchar2(50) not null);
+
+4.
+create table voter (
+voter_id number(20) primary key, 
+user_id number(20),
+constraint fk_userid FOREIGN KEY(user_id) REFERENCES "user"(user_id)
+);
+
+5.
+create table securityQA (sqa_id number(20) primary key, question varchar2(90) not null, answer varchar2(90) not null, user_id number(10), constraint fk_userid1 FOREIGN KEY(user_id) REFERENCES "user"(user_id));
+
+6. 
+create table participant(pId number(20) primary key, pName varchar2(50) not null, party_id number(20), constraint fk_partyId FOREIGN KEY(party_id) REFERENCES party(party_id));
+
+7.
+create table election_participant(id number(10) primary key, votes number(10), election_id number(20), pId number(20), constraint fk_electionId FOREIGN KEY(election_id) REFERENCES elections(election_id), constraint fk_pId FOREIGN KEY(pId) REFERENCES participant(pId));
+
+
+
+
+"com.beans.Election,
+com.beans.ElectionParticipants,com.beans.EOfficer,
+com.beans.Participant,com.beans.Party,
+com.beans.SecurityQA,com.beans.Updates,
+com.beans.User,com.beans.Voter,
+com.dao.ElectionDAO,com.dao.ElectionParticipantsDAO,
+com.dao.PartyDAO,com.dao.SecurityQADAO,
+com.dao.UpdatesDAO,com.dao.UserDAO,
+com.dao.VoterDAO,com.dao.ParticipantDAO,
+com.dao.EOfficerDAO"
+
+ALTER TABLE "user" ADD CONSTRAINT unique_user UNIQUE (phone_no);
